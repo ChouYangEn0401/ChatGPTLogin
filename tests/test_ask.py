@@ -3,7 +3,7 @@ import subprocess
 
 import pytest
 
-from openai_login import NOT_FOUND, LoginError, argv, ask, parse_events
+from chatgpt_login import NOT_FOUND, LoginError, argv, ask, parse_events
 
 OK = "\n".join(json.dumps(e) for e in [
     {"type": "thread.started", "thread_id": "t1"},

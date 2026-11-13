@@ -1,7 +1,7 @@
 """
-openai_login: 用「使用者自己的 ChatGPT 訂閱」叫 OpenAI，做法是驅動官方的 `codex` 命令列（`codex exec --json`）。
+chatgpt_login: 用「使用者自己的 ChatGPT 訂閱」叫 OpenAI，做法是驅動官方的 `codex` 命令列（`codex exec --json`）。
 
-    from openai_login import ask
+    from chatgpt_login import ask
     reply = ask("請只回一個字：好")          # Reply(text=..., usage={...}, thread_id=...)
 
 為什麼這樣做（調查 2026-11-13，官方文件 learn.chatgpt.com/docs：auth、non-interactive-mode、pricing）：
@@ -121,7 +121,7 @@ def ask(prompt: str, *, model: str = "", timeout: float = 180.0, workdir: str = 
         os.makedirs(workdir, exist_ok=True)
         done = go(workdir)
     else:
-        with tempfile.TemporaryDirectory(prefix="openai_login-", ignore_cleanup_errors=True) as tmp:
+        with tempfile.TemporaryDirectory(prefix="chatgpt_login-", ignore_cleanup_errors=True) as tmp:
             done = go(tmp)
     try:
         return parse_events(done.stdout or "")
