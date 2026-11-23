@@ -1,5 +1,7 @@
 # chatgpt_login
 
+第一次用？看 [docs/TUTORIAL.md](docs/TUTORIAL.md)
+
 > 非官方套件，與 OpenAI 無關。它只是驅動你自己電腦上、已登入的官方 `codex` 命令列，用你自己的 ChatGPT 訂閱；不讀、不存任何 token。姊妹套件：[GithubCopilotLogin](https://github.com/ChouYangEn0401/GithubCopilotLogin)。
 
 用你自己的 ChatGPT 訂閱，從 Python 叫 OpenAI：驅動官方的 `codex exec --json`，**不讀 `~/.codex/auth.json`**。
