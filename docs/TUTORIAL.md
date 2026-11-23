@@ -61,14 +61,14 @@
    Python 3.12.8
    ```
 
-   數字要是 **3.9 或更新**。
+   這個套件 3.9 以上就能跑，但**建議 3.11 或更新**：之後如果要用 ntu_easy_llm 或 LLOP，它們要 3.11，先裝新版就不用重裝。
 
-4. **不是這樣怎麼辦**：看到 `Python was not found` 或「無法辨識 'python' 詞彙」：到 <https://www.python.org/downloads/> 下載 Windows 安裝檔，
+4. **不是這樣怎麼辦**：看到 `Python was not found` 或「無法辨識 'python' 詞彙」，或版本比 3.11 舊：到 <https://www.python.org/downloads/> 下載 Windows 安裝檔，
    安裝畫面第一頁**一定要勾「Add python.exe to PATH」**再按 Install。裝好後**關掉 PowerShell 再開一個新的**，重打一次。
 
 ### 步驟 3：安裝官方 Codex CLI
 
-1. **做什麼**：裝 OpenAI 官方的 Codex 命令列工具（指令叫 `codex`）。
+1. **做什麼**：裝 OpenAI 官方的 Codex 命令列工具（指令叫 `codex`）。這是官方文件給 Windows 的安裝指令（2026-11-23 查過）。
 2. **打什麼**：
 
    ```powershell
@@ -84,9 +84,23 @@
    會印出一行版本號。
 
 4. **不是這樣怎麼辦**：
-   - 重開後 `codex` 還是「無法辨識」：重新開機再試一次。
-   - 也可以改用 npm 安裝（要先到 <https://nodejs.org/> 裝 Node.js）：`npm install -g @openai/codex`。
-   - OpenAI 官方說明：<https://developers.openai.com/codex/cli>。
+   - 重開後 `codex` 還是「無法辨識」：可以試著用完整路徑直接執行（官方安裝程式預設裝在這裡）：
+
+     ```powershell
+     & "$env:LOCALAPPDATA\Programs\OpenAI\Codex\bin\codex.exe" --version
+     ```
+
+     有印出版本號，代表裝好了、只是 PowerShell 還不知道它在哪。重新開機一次再試；還是不行，就把
+     `%LOCALAPPDATA%\Programs\OpenAI\Codex\bin` 加進 PATH（Windows 的「編輯使用者的環境變數」→ `Path` → 新增）。
+     **這個套件只在 PATH 上找 `codex`**（另外只多找 npm 的安裝位置），所以 PATH 沒設好，步驟 8 會說找不到 codex。
+   - 也可以改用 npm 安裝：到 <https://nodejs.org/> 下載安裝 Node.js，裝完**關掉 PowerShell 重開**，然後打（要寫 `npm.cmd`，PowerShell 有時會擋下只寫 `npm` 的情況）：
+
+     ```powershell
+     npm.cmd install -g @openai/codex
+     ```
+
+     用 npm 裝的找不到時，可以試 `& "$env:APPDATA\npm\codex.cmd" --version`；這個套件自己也會去那裡找。
+   - OpenAI 官方說明：<https://learn.chatgpt.com/docs/codex/cli>。
 
 ### 步驟 4：在終端機登入 ChatGPT
 
@@ -97,7 +111,8 @@
    codex login
    ```
 
-3. **會看到什麼**：選 **Sign in with ChatGPT**，照指示在瀏覽器登入你的 ChatGPT 帳號。完成後回到 `PS ...>`。
+3. **會看到什麼**：照畫面指示，用 **Sign in with ChatGPT** 在瀏覽器登入你的 ChatGPT 帳號。
+   **如果它直接打開瀏覽器、沒有先讓你選，也沒關係**，在瀏覽器登入就好。完成後回到 `PS ...>`。
    想確認有沒有登入，可以打：
 
    ```powershell
@@ -222,6 +237,7 @@
 | `chatgpt_login.UsageLimitError: …` | 看起來是 ChatGPT 方案額度用完（有 5 小時的額度視窗） | 等一段時間再試 |
 | `chatgpt_login.LoginError: Codex 沒有回任何文字（輸出裡沒有 agent_message）。` | `codex` 跑了但沒給答案 | 直接在終端機打 `codex` 看看能不能正常用；`codex` 更新一下再試 |
 | `chatgpt_login.CallTimeoutError: Codex 超過 180 秒沒回。` | 等太久 | 再試一次；程式裡可以 `ask(..., timeout=300)` |
+| 一般的 `chatgpt_login.LoginError: …`，原因看不懂 | 這個套件**還沒在真的 `codex` 上驗證過**；可能是官方 CLI 在 Windows 上的限制（例如資料夾信任、沙盒），不一定是你做錯 | 先直接在終端機打 `codex` 確認能正常用；仍不行的話把錯誤訊息記下來（遮掉帳號資訊）回報給專案 |
 
 「沒登入」「額度用完」是看 `codex` 的錯誤訊息猜的，猜不到就是一般的 `LoginError`（README 有寫）。
 
